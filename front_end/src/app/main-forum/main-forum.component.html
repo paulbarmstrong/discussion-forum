@@ -1,0 +1,19 @@
+<!--
+	MainForumComponent
+	
+	Author: Paul Armstrong
+	Description:
+		This component represents the main forum thread list
+
+-->
+
+
+<div class="container">
+	<ul class="collection" *ngFor="let forumThread of forumThreads">
+		<a routerLink="/thread/{{forumThread.id}}" class="collection-item black-text">
+			<h5>{{forumThread.title}}</h5>
+			Submitted {{forumThread.date | timeSince}} ago by <b>{{forumThread.author}}</b><span class="right grey-text">{{forumThread.views | handlePlural:'view'}}</span><br>
+			{{forumThread.date | date:'M/d/yyyy, h:mm a' | replace:',':', at'}}<span class="right grey-text">{{forumThread.comments.length | handlePlural:'reply'}}</span>
+		</a>
+	</ul>
+</div>

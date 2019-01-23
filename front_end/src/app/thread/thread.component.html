@@ -1,0 +1,36 @@
+<!--
+	ThreadComponent
+	
+	Author: Paul Armstrong
+	Description:
+		This component represents a forum thread's content.
+	
+-->
+
+<div class="container">
+	<h5>{{forumThread.title}}</h5>
+	<div class="collection">
+		<div class="collection-item">
+			{{forumThread.subtitle}}
+		</div>
+	</div>
+	Submitted {{forumThread.date | timeSince}} ago by <b>{{forumThread.author}}</b><span class="right grey-text">{{forumThread.views | handlePlural:'view'}}</span><br>
+	{{forumThread.date | date:'M/d/yyyy, h:mm a' | replace:',':', at'}}<span class="right grey-text">{{forumThread.comments.length | handlePlural:'reply'}}</span><br><br>
+
+	<ul class="collection">
+		<li class="collection-item">
+			<textarea placeholder="Write a comment..." id="comment_box" class="materialize-textarea"></textarea>
+		</li>
+	</ul>
+	<ul class="collection" *ngFor="let forumComment of forumThread.comments">
+		<li class="collection-item">
+			<b>{{forumComment.author}}</b><br>
+			{{forumComment.content}}
+			<div class="grey-text">
+				Submitted {{forumComment.date | timeSince}} ago
+				<span class="right">{{forumComment.date | date:'M/d/yyyy, h:mm a' | replace:',':', at'}}</span>
+			</div>
+		</li>
+	</ul>
+</div>
+
