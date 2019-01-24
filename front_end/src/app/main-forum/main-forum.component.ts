@@ -20,7 +20,7 @@ import { DatabaseService } from '../database.service';
 })
 export class MainForumComponent implements OnInit {
 	
-	forumThreads: ForumThread[];
+	forumThreads: ForumThread[] = [];
 
 	constructor(private databaseService: DatabaseService) { }
 

@@ -11,6 +11,7 @@ export class ForumComment {
 	author: string;
 	content: string;
 	date: number;
+	threadId: number;
 }
 
 export class ForumThread {

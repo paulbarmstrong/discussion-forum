@@ -19,7 +19,8 @@
 
 	<ul class="collection">
 		<li class="collection-item">
-			<textarea placeholder="Write a comment..." id="comment_box" class="materialize-textarea"></textarea>
+			<textarea [(ngModel)]="commentText" placeholder="Write a comment..." id="comment_box" class="materialize-textarea"></textarea>
+			<div *ngIf="commentText.length > 0" class="btn-small blue-grey darken-2" (click)="submitForumComment()">Submit</div>
 		</li>
 	</ul>
 	<ul class="collection" *ngFor="let forumComment of forumThread.comments">

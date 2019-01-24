@@ -9,10 +9,10 @@ import { SubmissionComponent } from './submission/submission.component';
 import { ThreadComponent } from './thread/thread.component';
 
 const routes: Routes = [
-	{ path: '', redirectTo: 'main-forum', pathMatch: 'full'},
-	{ path: 'main-forum', component: MainForumComponent},
+	{ path: '', component: MainForumComponent, pathMatch: 'full'},
 	{ path: 'submission', component: SubmissionComponent},
-	{ path: 'thread/:id', component: ThreadComponent}
+	{ path: 'thread/:id', component: ThreadComponent},
+	{ path: 'empty', component: ThreadComponent}
 ];
 
 @NgModule({

@@ -4,24 +4,15 @@
 
 * Author: Paul Armstrong
 * Date: January 2019
-* Progress: 30%
+* Progress: 50%
 
 ## Description
 
-With this project I am creating a web application called Discussion Forum. The application will be a general web forum which allows users to submit and respond to threads.
-
-### Front end
-* Angular
-* Materialize css
-
-### Back end
-* Node.js
-* Express.js
+With this project I am creating a web application called Discussion Forum. The application will be a web forum which allows users to submit and respond to threads. So far I am using Angular and Materialize css for the front end, and Node.js with Express.js for the back end.
 
 ## Plans
 
-* Continue to improve http communications between server and client
+* Host the project on a web server
 * Begin storing serverside data in an actual database
 * Allow for users to create an account
-
 

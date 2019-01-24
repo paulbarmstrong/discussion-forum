@@ -25,46 +25,21 @@ export class DatabaseService {
 		headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 	};
 	
-	private forumThreads: ForumThread[] = [{
-			author: 'Paul',
-			title: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus convallis, '
-				+'ipsum eu consequat lobortis, justo nisl varius arcu, a egestas urna massa ac tortor.',
-			subtitle: 'Donec dictum aliquet sapien. Vestibulum ante ipsum primis?',
-			date: 1547904951533,
-			id: 0,
-			views: 8,
-			comments: [{
-				author: 'TurtleMan',
-				content: 'Suspendisse non ligula diam. Cras interdum condimentum consectetur.',
-				date: 1548051899690
-			}]
-		},{
-			author: 'User2',
-			title: 'Nullam consectetur mattis nibh, vitae convallis neque accumsan quis.'
-				+'Cras faucibus tincidunt dolor, eu pellentesque est molestie et.',
-			subtitle: 'Quisque condimentum, turpis nec mattis fringilla, elit risus elementum ligula, at dignissim nibh ipsum bibendum nibh.',
-			date: 1547903562932,
-			id: 1,
-			views: 14,
-			comments: [{
-				author: 'Paul',
-				content: 'Quisque nec vehicula dolor, et ultrices dolor. Integer sit amet faucibus leo.',
-				date: 1547904562932
-			},{
-				author: 'User3',
-				content: 'Fusce elementum risus justo. Suspendisse non ligula diam. Cras interdum condimentum consectetur. Ut ac ipsum a odio tincidunt porttitor. ',
-				date: 1547906562932
-			}]
-		}
-	];
-	
 	constructor(private http: HttpClient) { }
 	
 	getForumThreads(): Observable<ForumThread[]> {
-		return this.http.get<ForumThread[]>('http://localhost:3000/threads');
+		return this.http.get<ForumThread[]>('http://discussion-forum.io/api/threads');
 	}
 
-	getForumThread(id: number): ForumThread {
-		return this.forumThreads.filter(thread => thread.id == id)[0];
+	getForumThread(id: number): Observable<ForumThread> {
+		return this.http.get<ForumThread>('http://discussion-forum.io/api/thread/'+id);
+	}
+	
+	submitForumThread(newForumThread: ForumThread): Observable<boolean> {
+		return this.http.post<boolean>('http://discussion-forum.io/api/submitThread', newForumThread, this.httpOptions);
+	}
+	
+	submitForumComment(newForumComment: ForumComment): Observable<boolean> {
+		return this.http.post<boolean>('http://discussion-forum.io/api/submitComment', newForumComment, this.httpOptions);
 	}
 }

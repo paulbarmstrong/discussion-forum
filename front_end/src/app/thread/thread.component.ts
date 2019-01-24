@@ -7,8 +7,9 @@
 	
 **/
 
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 import { ForumComment, ForumThread } from '../ForumThread';
 import { DatabaseService } from '../database.service';
@@ -20,9 +21,11 @@ import { DatabaseService } from '../database.service';
 })
 export class ThreadComponent implements OnInit {
 	
-	forumThread: ForumThread;
+	@Input() commentText: string = "";
+	
+	forumThread: ForumThread = {author: '', title: '', subtitle: '', date: 0, id: 0, views: 0, comments: []};
 
-	constructor(private route: ActivatedRoute, private databaseService: DatabaseService) { }
+	constructor(private route: ActivatedRoute, private router: Router, private databaseService: DatabaseService, private location: Location) { }
 
 	ngOnInit() {
 		this.getForumThread();
@@ -30,6 +33,29 @@ export class ThreadComponent implements OnInit {
 
 	getForumThread(): void {
 		var id = Number(this.route.snapshot.paramMap.get('id'));
-		this.forumThread = this.databaseService.getForumThread(id);
+		this.databaseService.getForumThread(id).subscribe(forumThread => this.forumThread = forumThread);
+	}
+	
+	submitForumComment(): void {
+		var id = Number(this.route.snapshot.paramMap.get('id'));
+		
+		// Create the new ForumComment object based on input and the current time
+		if (this.commentText.length > 0 && id !== undefined) {
+			this.databaseService.submitForumComment({
+				author: 'TempUser',
+				content: this.commentText,
+				date: Date.now(),
+				threadId: id
+			}).subscribe(result => {
+				if (result) this.refreshComponent();
+			});
+		}
+	}
+	
+	refreshComponent(): void {
+		const oldUrl = this.router.url.toString();
+		this.router.navigateByUrl('/empty').then(() => {
+			this.router.navigateByUrl(oldUrl);
+		});
 	}
 }

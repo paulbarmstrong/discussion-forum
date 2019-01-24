@@ -32,7 +32,7 @@ export class TimeSincePipe implements PipeTransform {
 		i = i > 0 ? i - 1 : 0;
 		
 		// Create the output
-		const unitQuantity = Math.round(elapsedSeconds / unitWeights[i]);
+		const unitQuantity = Math.floor(elapsedSeconds / unitWeights[i]);
 		const unitString = unitNames[i] + (unitQuantity === 1 ? '' : 's');
 		
 		// Create the string
