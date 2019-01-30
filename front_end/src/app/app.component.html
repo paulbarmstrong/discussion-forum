@@ -1,5 +1,37 @@
+<!--
+	App Component
+	
+	Author: Paul Armstrong
+	Description:
+		This is the root component for the site.
+		It contains the navbar and router for various other content.
+	
+-->
+
 <!-- Nav bar -->
-<app-navbar></app-navbar>
+<nav>
+	<div class="nav-wrapper blue-grey darken-2">
+		<a routerLink="" class="brand-logo center hide-on-small-only"><span class="valign-wrapper">Discussion Forum</span></a>
+		<a routerLink="" class="brand-logo center hide-on-med-and-up"><span class="flow-text valign-wrapper">Discussion Forum</span></a>
+		<ul class="left">
+			<li><a (click)="goBack()">
+				<i class="material-icons">arrow_back</i>
+			</a></li>
+		</ul>
+		<ul class="right">
+			<li *ngIf="username.length == 0; else navSignElse"><a routerLink="/sign-in">
+				<i class="material-icons left">person_outline</i>
+				<span class="hide-on-med-and-down">Sign In</span>
+			</a></li>
+			<ng-template #navSignElse>
+			<li><a (click)="signOut()">
+				<i class="material-icons left">person</i>
+				<span class="hide-on-med-and-down">Sign Out</span>
+			</a></li>
+			</ng-template>
+		</ul>
+	</div>
+</nav>
 
 <!-- Other content handled by the router module -->
-<router-outlet></router-outlet>
+<router-outlet (activate)="onChangeRoute()"></router-outlet>

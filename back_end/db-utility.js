@@ -16,9 +16,10 @@ module.exports = {
 	
 	// Calls callback with either the forumThread with the id, or undefined
 	getThreadById: function (db, id, callback) {
+		db.run('UPDATE forum_threads SET views = views + 1 WHERE id = ?', [id]);
 		db.get('SELECT * FROM forum_threads WHERE id = ?', [id], (err, forumThread) => {
 			if (forumThread !== undefined) {
-				db.all('SELECT * FROM forum_comments WHERE threadId=?', [forumThread.id], (err, forumComments) => {
+				db.all('SELECT * FROM forum_comments WHERE threadId = ?', [forumThread.id], (err, forumComments) => {
 					forumThread.comments = forumComments;
 					callback(forumThread);
 				});
@@ -44,19 +45,20 @@ module.exports = {
 		});
 	},
 	
-	// Adds newThread to the db and calls callback with boolean of success
+	// Adds newThread to the db and calls callback with the id of the new thread
 	addThread: function (db, newThread, callback) {
 		
 		db.all('SELECT * FROM id_count_table', (err, rows) => {
 			var count = rows.length > 0 ? rows[0].count : 0;
+			
 			db.run('INSERT INTO forum_threads VALUES(?,?,?,?,?,?)',[
 				spaceFilter.clean(newThread.author),
 				spaceFilter.clean(newThread.title),
 				spaceFilter.clean(newThread.subtitle),
-				newThread.date,
+				Date.now(),
 				count,
 				newThread.views
-			], err => callback(!err));
+			], err => callback(err ? -1 : count));
 			db.run('UPDATE id_count_table SET count=?', [count+1]);
 		});
 	},
@@ -64,11 +66,41 @@ module.exports = {
 	// Adds newComment to the db and calls callback with boolean of success
 	addComment: function (db, newComment, callback) {
 		db.run('INSERT INTO forum_comments VALUES(?,?,?,?)',[
-			spaceFilter.clean(newComment.author),
+			newComment.author,
 			spaceFilter.clean(newComment.content),
-			newComment.date,
+			Date.now(),
 			newComment.threadId
 		], err => callback(!err));
+	},
+	
+	// Create a new user in the users table and call callback with a string
+	createUser: function (db, newUser, callback) {
+		if (spaceFilter.clean(newUser.username) !== newUser.username) {
+			callback('Username not allowed');
+			return;
+		}
+		
+		db.get('SELECT * FROM users WHERE username = ?', [newUser.username], (err, row) => {
+			if (row === undefined) {
+				db.run('INSERT INTO users VALUES(?,?,?,?,?)',
+						[newUser.username, newUser.email, newUser.hash_pass, newUser.salt, 1], err => {
+					if (err) {
+						callback('Account creation failed: '+err.message);
+					} else {
+						callback('Account creation successful.');
+					}
+				});
+			} else {
+				callback('Account creation failed: Username already taken.');
+			}
+		});
+	},
+	
+	// Calls callback with either the user with the searchName, or undefined
+	getUserByName: function (db, searchName, callback) {
+		db.get('SELECT * FROM users WHERE username = ?', [searchName], (err, userInfo) => {
+			callback(userInfo);
+		});
 	},
 	
 	// Helper function to match the comments to each forum thread with constant runtime

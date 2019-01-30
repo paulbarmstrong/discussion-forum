@@ -1,0 +1,53 @@
+<!--
+	CreateAccountComponent
+	
+	Author: Paul Armstrong
+	Description:
+		This component represents an account creation form for the site.
+	
+-->
+
+<div class="container">
+	<div class="container">
+	<h4>Create an account</h4>
+	<p>Please provide a <b>username</b> and <b>password</b> for the account.</p>
+	
+		<div *ngIf="!usernameAccepted()">
+			<p class="red-text">• Username must be 3-30 characters in length, and contain only letters, numbers, and (_, -) characters.</p>
+		</div>
+		<div *ngIf="usernameAccepted() && !passwordAccepted()">
+			<p class="red-text">• Password must be 3-30 characters in length, and contain only letters, numbers, and (_, -, !, @, #, $, %, ^, &, *) characters.</p>
+		</div>
+		<div *ngIf="usernameAccepted() && passwordAccepted() && password !== passwordAgain">
+			<p class="red-text">• Retyped password must match password.</p>
+		</div>
+		<h5 *ngIf="message.length > 0" class=""><b>{{message}}</b></h5>
+	
+		<div class="row">
+			<div class="col s6">
+				<input [(ngModel)]="username" id="usrnme_input">
+				<label for="usrnme_input">Username</label>
+			</div>
+			<div class="col s6">
+				<input [(ngModel)]="email" id="eml_input">
+				<label for="eml_input">Email Address</label>
+			</div>
+			<div class="col s12">
+				<input type="password" [(ngModel)]="password" id="pswd_input0">
+				<label for="pswd_input0">Password</label>
+			</div>
+			<div class="col s12">
+				<input type="password" [(ngModel)]="passwordAgain" id="pswd_input1">
+				<label for="pswd_input1">Retype Password</label>
+			</div>
+
+		</div>
+		<br><br>
+		<div *ngIf="usernameAccepted() && passwordAccepted() && password === passwordAgain; else buttonElse">
+			<a class="btn-large blue-grey darken-2" (click)="createAccount()">Submit</a>
+		</div>
+		<ng-template #buttonElse>
+			<a class="btn-large blue-grey darken-2 disabled">Submit</a>
+		</ng-template>
+	</div>
+</div>

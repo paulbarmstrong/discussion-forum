@@ -12,23 +12,23 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MainForumComponent } from './main-forum/main-forum.component';
-import { SubmissionComponent } from './submission/submission.component';
-import { NavbarComponent } from './navbar/navbar.component';
 import { ThreadComponent } from './thread/thread.component';
 import { ReplacePipe } from './replace.pipe';
 import { TimeSincePipe } from './time-since.pipe';
 import { HandlePluralPipe } from './handle-plural.pipe';
+import { SignInComponent } from './sign-in/sign-in.component';
+import { CreateAccountComponent } from './create-account/create-account.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainForumComponent,
-    SubmissionComponent,
-    NavbarComponent,
     ThreadComponent,
 	ReplacePipe,
 	TimeSincePipe,
-	HandlePluralPipe
+	HandlePluralPipe,
+	SignInComponent,
+	CreateAccountComponent
   ],
   imports: [
     BrowserModule,

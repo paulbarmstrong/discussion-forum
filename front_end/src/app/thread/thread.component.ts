@@ -23,12 +23,17 @@ export class ThreadComponent implements OnInit {
 	
 	@Input() commentText: string = "";
 	
+	message: string = '';
+	
+	signedIn: boolean = false;
+	
 	forumThread: ForumThread = {author: '', title: '', subtitle: '', date: 0, id: 0, views: 0, comments: []};
 
 	constructor(private route: ActivatedRoute, private router: Router, private databaseService: DatabaseService, private location: Location) { }
 
 	ngOnInit() {
 		this.getForumThread();
+		this.signedIn = localStorage.getItem('sessionId') !== null;
 	}
 
 	getForumThread(): void {
@@ -42,12 +47,15 @@ export class ThreadComponent implements OnInit {
 		// Create the new ForumComment object based on input and the current time
 		if (this.commentText.length > 0 && id !== undefined) {
 			this.databaseService.submitForumComment({
-				author: 'TempUser',
+				author: localStorage.getItem('username'),
 				content: this.commentText,
 				date: Date.now(),
 				threadId: id
-			}).subscribe(result => {
-				if (result) this.refreshComponent();
+			}).subscribe(message => {
+				this.message = message;
+				if (message.startsWith('Su')) {
+					this.refreshComponent();
+				}
 			});
 		}
 	}

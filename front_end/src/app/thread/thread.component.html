@@ -16,15 +16,23 @@
 	</div>
 	Submitted {{forumThread.date | timeSince}} ago by <b>{{forumThread.author}}</b><span class="right grey-text">{{forumThread.views | handlePlural:'view'}}</span><br>
 	{{forumThread.date | date:'M/d/yyyy, h:mm a' | replace:',':', at'}}<span class="right grey-text">{{forumThread.comments.length | handlePlural:'reply'}}</span><br><br>
+	
+	<h5 *ngIf="message.length > 0" class=""><b>{{message}}</b></h5>
 
 	<ul class="collection">
-		<li class="collection-item">
+		<li *ngIf="signedIn; else commentTextAreaElse" class="collection-item">
 			<textarea [(ngModel)]="commentText" placeholder="Write a comment..." id="comment_box" class="materialize-textarea"></textarea>
 			<div *ngIf="commentText.length > 0" class="btn-small blue-grey darken-2" (click)="submitForumComment()">Submit</div>
 		</li>
+		
+		<ng-template #commentTextAreaElse>
+			<a routerLink="/sign-in" class="collection-item">
+				<textarea disabled placeholder="Sign in to write a comment..." id="comment_box" class="materialize-textarea"></textarea>
+			</a>
+		</ng-template>
 	</ul>
-	<ul class="collection" *ngFor="let forumComment of forumThread.comments">
-		<li class="collection-item">
+	<ul class="collection">
+		<li class="collection-item" *ngFor="let forumComment of forumThread.comments">
 			<b>{{forumComment.author}}</b><br>
 			{{forumComment.content}}
 			<div class="grey-text">

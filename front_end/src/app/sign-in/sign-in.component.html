@@ -1,0 +1,31 @@
+<!--
+	SignInComponent
+	
+	Author: Paul Armstrong
+	Description:
+		This component represents a sign in form for the site.
+	
+-->
+
+
+<div class="container">
+	<div class="container">
+	<h4>Sign In</h4>
+	
+		<p>Don't have an account? <a routerLink="/create-account" class="">Create one here</a></p>
+		<h5 *ngIf="message.length > 0" class=""><b>{{message}}</b></h5>
+		
+		<input [(ngModel)]="username" id="username_input">
+		<label for="username_input">Username</label>
+		<input type="password" [(ngModel)]="password" id="password_input">
+		<label for="password_input">Password</label>
+		
+		<br><br>
+		<div *ngIf="username.length > 0 && password.length > 0; else buttonElse">
+			<a class="btn-large blue-grey darken-2" (click)="signIn()">Submit</a>
+		</div>
+		<ng-template #buttonElse>
+			<a class="btn-large blue-grey darken-2 disabled">Submit</a>
+		</ng-template>
+	</div>
+</div>

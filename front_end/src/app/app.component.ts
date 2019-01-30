@@ -5,6 +5,9 @@
 **/
 
 import { Component } from '@angular/core';
+import { Location } from '@angular/common';
+
+import { DatabaseService } from './database.service';
 
 @Component({
 	selector: 'app-root',
@@ -12,5 +15,43 @@ import { Component } from '@angular/core';
 	styleUrls: []
 })
 export class AppComponent {
-	title = 'discussion-forum';
+	title: string = 'discussion-forum';
+	username: string = '';
+	
+	constructor(private databaseService: DatabaseService, private location: Location) { }
+	
+	// When the route changes check to make sure the session is valid
+	onChangeRoute(): void {
+		var username = localStorage.getItem('username');
+		var sessionId = localStorage.getItem('sessionId');
+		if (username !== null && sessionId !== null) {
+			
+			this.username = username;
+			
+			this.databaseService.checkSession({username: username, sessionId: sessionId}).subscribe(success => {
+				if (!success) {
+					localStorage.removeItem('username');
+					localStorage.removeItem('sessionId');
+					this.username = '';
+				}
+			});
+		}
+	}
+	
+	// When sign out is pressed, end the session
+	signOut(): void {
+		var username = localStorage.getItem('username');
+		var sessionId = localStorage.getItem('sessionId');
+		if (username !== null && sessionId !== null) {
+			this.databaseService.endSession({username: username, sessionId: sessionId}).subscribe(success => {
+				this.username = '';
+				localStorage.removeItem('username');
+				localStorage.removeItem('sessionId');
+			});
+		}
+	}
+	
+	goBack(): void {
+		this.location.back();
+	}
 }
